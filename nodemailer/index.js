@@ -10,6 +10,8 @@ const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI;
 
 const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
+
+// headers einstellen
 const oAuthToClient = new google.auth.OAuth2(
     CLIENT_ID,
     CLIENT_SECRET,
@@ -20,7 +22,9 @@ oAuthToClient.setCredentials({ refresh_token: REFRESH_TOKEN });
 
 const sendMail = async () => {
     try {
+        // accessToken holen
         const accessToken = await oAuthToClient.getAccessToken();
+        // einloggen
         const transport = nodemailer.createTransport({
             service: "gmail",
             auth: {
@@ -33,6 +37,7 @@ const sendMail = async () => {
             },
         });
 
+        // email erstellen
         const mailOptions = {
             from: `John Doe <${process.env.USER_EMAIL}>`,
             to: process.env.RECIEVER_MAIL,
@@ -41,6 +46,7 @@ const sendMail = async () => {
             html: "<p>Hello from gmail email using API</p>",
         };
 
+        // email senden
         const result = await transport.sendMail(mailOptions);
         return result;
     } catch (error) {
