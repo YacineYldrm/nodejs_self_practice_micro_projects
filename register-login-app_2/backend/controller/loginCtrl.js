@@ -16,5 +16,5 @@ export const loginCtrl = catchAsync(
             accessToken: accessToken,
         });
     },
-    { message: "Login failed" }
+    { message: "Login failed", status: 401 }
 );

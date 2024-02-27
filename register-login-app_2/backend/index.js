@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import express from "express";
 import morgan from "morgan";
 import mongoose from "mongoose";
+import multer, { diskStorage } from "multer";
 import { userRouter } from "./router/userRouter.js";
 import cookieSession from "cookie-session";
 
@@ -23,6 +24,15 @@ app.use(
     })
 );
 
+const storage = multer.diskStorage({
+    destination: "./data/uploads",
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + file.originalname);
+    },
+});
+const upload = multer({ storage: storage });
+
+app.use(upload.single("image"));
 app.use("/api/v1/users", userRouter);
 
 const runServer = app.listen(PORT, () =>
